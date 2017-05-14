@@ -46,13 +46,13 @@ set download_15=msi	%cacheFolder%\node-v6.10.3-x64.msi
 exit /b !ERRORLEVEL!
 
 :InstallGulp
-set download_14=test	where gulp	n	1
-set download_15=ex	call npm install -g gulp bower
+set download_14=test	call gulp	n	1
+set download_15=ex	call npm install gulp bower -g
 exit /b !ERRORLEVEL!
 
 :InstallBower
-set download_14=test	where bower	n	1
-set download_15=ex	call npm install -g gulp bower
+set download_14=test	call bower	n	1
+set download_15=ex	call npm install gulp bower -g
 exit /b !ERRORLEVEL!
 
 :InstallDotNet
