@@ -12,6 +12,8 @@ call :CallLoop DRefresh&if not !ERRORLEVEL!==0 exit /b !ERRORLEVEL!
 call :CallLoop InstallChocolatey&if not !ERRORLEVEL!==0 exit /b !ERRORLEVEL!
 call :CallLoop InstallNpm&if not !ERRORLEVEL!==0 exit /b !ERRORLEVEL!
 call :CallLoop InstallDotNet&if not !ERRORLEVEL!==0 exit /b !ERRORLEVEL!
+call :CallLoop InstallGulp&if not !ERRORLEVEL!==0 exit /b !ERRORLEVEL!
+call :CallLoop InstallBower&if not !ERRORLEVEL!==0 exit /b !ERRORLEVEL!
 
 exit /b !ERRORLEVEL!
 
@@ -41,6 +43,16 @@ exit /b !ERRORLEVEL!
 set download_14=test	call npm version	n	2
 set download_15=download	%cacheFolder%\node-v6.10.3-x64.msi	https://nodejs.org/dist/v6.10.3/node-v6.10.3-x64.msi
 set download_15=msi	%cacheFolder%\node-v6.10.3-x64.msi
+exit /b !ERRORLEVEL!
+
+:InstallGulp
+set download_14=test	where gulp	n	1
+set download_15=ex	call npm install -g gulp bower
+exit /b !ERRORLEVEL!
+
+:InstallBower
+set download_14=test	where bower	n	1
+set download_15=ex	call npm install -g gulp bower
 exit /b !ERRORLEVEL!
 
 :InstallDotNet
@@ -90,7 +102,7 @@ exit /b !ERRORLEVEL!
 
 set skipnext=0
 for /f "tokens=2,3,4,5,6,7 usebackq delims==	" %%i in (`set download_`) do (
-echo !ERRORLEVEL!
+rem echo !ERRORLEVEL!
 rem start of the loop
 
 if !skipnext! gtr 0 (
@@ -159,12 +171,16 @@ rem end of msu
 if %%i==test (
 set skipnext=%%l
 if [%%l]==[] set skipnext=1
+rem echo !ERRORLEVEL! errorlevel before and !skipnext!
+rem echo %%j
 %%j 2>nul 1>nul
+rem echo !ERRORLEVEL! errorlevel before and !skipnext! %%k
 if !ERRORLEVEL!==0 (
 if [%%k]==[y] set skipnext=0
 ) else (
 if not [%%k]==[y] set skipnext=0
 )
+rem echo !ERRORLEVEL! errorlevel after and !skipnext!
 )
 rem end of test
 
@@ -176,18 +192,24 @@ rem end of power script file
 if %%i==refreshvars (
 call %cacheFolder%\RefreshEnv.cmd
 )
-rem end of refreshvars
+rem end of psf
 
 if %%i==msi (
-echo errorlevel !ERRORLEVEL!
+rem echo errorlevel !ERRORLEVEL!
 start /wait %%j /quiet
-echo errorlevel !ERRORLEVEL!
+rem echo errorlevel !ERRORLEVEL!
 if not !ERRORLEVEL!==0 (
 echo failed while trying to install "%%j"
 exit /b !ERRORLEVEL!
 )
 )
-rem end of refreshvars
+rem end of msi
+
+if %%i==ex (
+%%j
+exit /b !ERRORLEVEL!
+)
+rem end of ex
 
 )
 rem end of skipnext
