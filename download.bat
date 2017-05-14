@@ -8,9 +8,9 @@ set cacheFolder=cache
 if not exist %cacheFolder% (
 mkdir %cacheFolder%
 )
-call :CallLoop Step1
+call :CallLoop DRefresh
 if not !ERRORLEVEL!==0 exit /b !ERRORLEVEL!
-call :CallLoop Step2
+call :CallLoop InstallChocolatey
 if not !ERRORLEVEL!==0 exit /b !ERRORLEVEL!
 
 exit /b !ERRORLEVEL!
@@ -24,22 +24,26 @@ endlocal
 call %cacheFolder%\RefreshEnv
 exit /b !ERRORLEVEL!
 
-
-:Step2
+:DRefresh
 :: RefreshEnv.cmd
 set download_01=download	%cacheFolder%\RefreshEnv.cmd	https://raw.githubusercontent.com/chocolatey/chocolatey/master/src/redirects/RefreshEnv.cmd
-
-:: Chocolatey install file
-set download_02=download	%cacheFolder%\installChocolatey.ps1	https://chocolatey.org/install.ps1
 exit /b !ERRORLEVEL!
 
-:Step1
-:: RefreshEnv.cmd
-set download_01=download	%cacheFolder%\RefreshEnv.cmd	https://raw.githubusercontent.com/chocolatey/chocolatey/master/src/redirects/RefreshEnv.cmd
-
+:InstallChocolatey
 :: Chocolatey install file
-set download_02=download	%cacheFolder%\installChocolatey.ps1	https://chocolatey.org/install.ps1
+set download_11=test	choco /?	n	3
+set download_01=download	%cacheFolder%\installChocolatey.ps1	https://chocolatey.org/install.ps1
+set download_12=psf	%cacheFolder%\installChocolatey.ps1
+set download_13=refreshvars
+exit /b !ERRORLEVEL!
 
+:InstallNpm
+set download_14=test	call npm version	n	2
+set download_15=download	%cacheFolder%\node-v6.10.3-x64.msi	https://nodejs.org/dist/v6.10.3/node-v6.10.3-x64.msi
+set download_15=msi	%cacheFolder%\node-v6.10.3-x64.msi
+exit /b !ERRORLEVEL!
+
+:InstallDotNet
 :: dot net version 4.5
 set download_03=Reg	HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full	Release	378389	http://download.microsoft.com/download/b/a/4/ba4a7e71-2906-4b2d-a0e1-80cf16844f5f/dotnetfx45_full_x86_x64.exe
 
@@ -76,13 +80,6 @@ rem set download_10=Reg	HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\NET Framework Setu
 
 :: dot net 4.7 10 creators
 rem set download_10=Reg	HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full	Release	460798	https://download.microsoft.com/download/A/1/D/A1D07600-6915-4CB8-A931-9A980EF47BB7/NDP47-DevPack-KB3186612-ENU.exe
-
-set download_11=test	choco /?	n	2
-set download_12=psf	%cacheFolder%\installChocolatey.ps1
-set download_13=refreshvars
-set download_14=test	call npm version	n	2
-set download_15=download	%cacheFolder%\node-v6.10.3-x64.msi	https://nodejs.org/dist/v6.10.3/node-v6.10.3-x64.msi
-set download_15=msi	%cacheFolder%\node-v6.10.3-x64.msi
 
 rem @powershell -NoProfile -ExecutionPolicy Bypass -File %cacheFolder%\installChocolatey.ps1
 rem SET "PATH=%PATH%;%ALLUSERSPROFILE%\chocolatey\bin"
