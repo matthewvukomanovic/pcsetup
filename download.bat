@@ -8,7 +8,32 @@ set cacheFolder=cache
 if not exist %cacheFolder% (
 mkdir %cacheFolder%
 )
+call :CallLoop Step1
+if not !ERRORLEVEL!==0 exit /b !ERRORLEVEL!
+call :CallLoop Step2
+if not !ERRORLEVEL!==0 exit /b !ERRORLEVEL!
 
+exit /b !ERRORLEVEL!
+
+:CallLoop
+setlocal EnableDelayedExpansion
+call:%1
+if not !ERRORLEVEL!==0 exit /b !ERRORLEVEL!
+call :DownloadLoop
+endlocal
+call %cacheFolder%\RefreshEnv
+exit /b !ERRORLEVEL!
+
+
+:Step2
+:: RefreshEnv.cmd
+set download_01=download	%cacheFolder%\RefreshEnv.cmd	https://raw.githubusercontent.com/chocolatey/chocolatey/master/src/redirects/RefreshEnv.cmd
+
+:: Chocolatey install file
+set download_02=download	%cacheFolder%\installChocolatey.ps1	https://chocolatey.org/install.ps1
+exit /b !ERRORLEVEL!
+
+:Step1
 :: RefreshEnv.cmd
 set download_01=download	%cacheFolder%\RefreshEnv.cmd	https://raw.githubusercontent.com/chocolatey/chocolatey/master/src/redirects/RefreshEnv.cmd
 
@@ -61,6 +86,10 @@ set download_15=msi	%cacheFolder%\node-v6.10.3-x64.msi
 
 rem @powershell -NoProfile -ExecutionPolicy Bypass -File %cacheFolder%\installChocolatey.ps1
 rem SET "PATH=%PATH%;%ALLUSERSPROFILE%\chocolatey\bin"
+exit /b !ERRORLEVEL!
+
+
+:DownloadLoop
 
 set skipnext=0
 for /f "tokens=2,3,4,5,6,7 usebackq delims==	" %%i in (`set download_`) do (
@@ -168,5 +197,5 @@ rem end of skipnext
 
 )
 
-exit /b 0
+exit /b !ERRORLEVEL!
 
