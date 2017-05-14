@@ -9,11 +9,11 @@ if not exist %cacheFolder% (
 mkdir %cacheFolder%
 )
 call :CallLoop DRefresh&if not !ERRORLEVEL!==0 exit /b !ERRORLEVEL!
-call :CallLoop InstallChocolatey&if not !ERRORLEVEL!==0 exit /b !ERRORLEVEL!
 call :CallLoop InstallNpm&if not !ERRORLEVEL!==0 exit /b !ERRORLEVEL!
 call :CallLoop InstallDotNet&if not !ERRORLEVEL!==0 exit /b !ERRORLEVEL!
 call :CallLoop InstallGulp&if not !ERRORLEVEL!==0 exit /b !ERRORLEVEL!
 call :CallLoop InstallBower&if not !ERRORLEVEL!==0 exit /b !ERRORLEVEL!
+call :CallLoop InstallChocolatey&if not !ERRORLEVEL!==0 exit /b !ERRORLEVEL!
 
 exit /b !ERRORLEVEL!
 
