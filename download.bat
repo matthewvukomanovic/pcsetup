@@ -163,7 +163,7 @@ set f=%%~nxk
 set download=%cacheFolder%\!f!
 if not exist !download! echo downloading !url!&@powershell -NoProfile -ExecutionPolicy Bypass -Command "(New-Object System.Net.WebClient).DownloadFile('!url!', '!download!')" & if not !ERRORLEVEL!==0 echo error downloading !url!&EXIT /B !ERRORLEVEL!
 echo installing from !download!
-rem start /wait !download! /promptrestart /passive /full
+start /wait !download! /promptrestart /passive /full
 if not !ERRORLEVEL!==0 echo failed while trying to install !download!&exit /b !ERRORLEVEL!
 ) else (
 echo %%k already installed
