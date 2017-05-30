@@ -65,6 +65,9 @@ set download_14=test	call bower	n	1
 set download_15=ex	call npm install gulp bower -g
 exit /b !ERRORLEVEL!
 
+:InstallTest
+exit /b !ERRORLEVEL!
+
 :InstallDotNet
 :: dot net version 4.5
 set download_03=Reg	HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full	Release	378389	http://download.microsoft.com/download/b/a/4/ba4a7e71-2906-4b2d-a0e1-80cf16844f5f/dotnetfx45_full_x86_x64.exe
@@ -92,10 +95,13 @@ rem set download_07=Reg	HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\NET Framework Setu
 :: dot net 4.6.2 not windows 10 anniversary
 set download_08=Reg	HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full	Release	394806	https://download.microsoft.com/download/E/F/D/EFD52638-B804-4865-BB57-47F4B9C80269/NDP462-DevPack-KB3151934-ENU.exe
 
+:: BuildTools Full
+set download_09=RegE	HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\VisualStudio\14.0\Setup	https://download.microsoft.com/download/E/E/D/EEDF18A8-4AED-4CE0-BEBE-70A83094FC5A/BuildTools_Full.exe
+
 :: dot net 4.6.2 windows 10 aniversary
 rem set download_08=Reg	HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full	Release	394802	https://download.microsoft.com/download/E/F/D/EFD52638-B804-4865-BB57-47F4B9C80269/NDP462-DevPack-KB3151934-ENU.exe
 
-set download_09=msu	KB4019990	http://download.microsoft.com/download/2/F/4/2F4F48F4-D980-43AA-906A-8FFF40BCB832/Windows8-RT-KB4019990-x64.msu
+set download_10=msu	KB4019990	http://download.microsoft.com/download/2/F/4/2F4F48F4-D980-43AA-906A-8FFF40BCB832/Windows8-RT-KB4019990-x64.msu
 
 :: dot net 4.7 everything but 10 creators
 rem set download_10=Reg	HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full	Release	460805	https://download.microsoft.com/download/A/1/D/A1D07600-6915-4CB8-A931-9A980EF47BB7/NDP47-DevPack-KB3186612-ENU.exe
@@ -106,7 +112,6 @@ rem set download_10=Reg	HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\NET Framework Setu
 rem @powershell -NoProfile -ExecutionPolicy Bypass -File %cacheFolder%\installChocolatey.ps1
 rem SET "PATH=%PATH%;%ALLUSERSPROFILE%\chocolatey\bin"
 exit /b !ERRORLEVEL!
-
 
 :DownloadLoop
 
@@ -144,6 +149,24 @@ echo installing from !download!
 start /wait !download! /norestart /passive /showrmui
 if not !ERRORLEVEL!==0 echo failed while trying to install !download!&exit /b !ERRORLEVEL!
 )
+)
+)
+rem end of reg
+
+if %%i==RegE (
+Reg.exe QUERY "%%j" 2>nul 1>nul
+if !ERRORLEVEL!==1 (
+:: now it needs to be potentially downloaded and installed
+echo install %%k
+set url=%%k
+set f=%%~nxk
+set download=%cacheFolder%\!f!
+if not exist !download! echo downloading !url!&@powershell -NoProfile -ExecutionPolicy Bypass -Command "(New-Object System.Net.WebClient).DownloadFile('!url!', '!download!')" & if not !ERRORLEVEL!==0 echo error downloading !url!&EXIT /B !ERRORLEVEL!
+echo installing from !download!
+rem start /wait !download! /promptrestart /passive /full
+if not !ERRORLEVEL!==0 echo failed while trying to install !download!&exit /b !ERRORLEVEL!
+) else (
+echo %%k already installed
 )
 )
 rem end of reg
