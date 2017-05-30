@@ -14,6 +14,7 @@ call :CallLoop InstallDotNet&if not !ERRORLEVEL!==0 exit /b !ERRORLEVEL!
 call :CallLoop InstallGulp&if not !ERRORLEVEL!==0 exit /b !ERRORLEVEL!
 call :CallLoop InstallBower&if not !ERRORLEVEL!==0 exit /b !ERRORLEVEL!
 call :CallLoop InstallChocolatey&if not !ERRORLEVEL!==0 exit /b !ERRORLEVEL!
+call :CallLoop DNew&if not !ERRORLEVEL!==0 exit /b !ERRORLEVEL!
 
 exit /b !ERRORLEVEL!
 
@@ -29,6 +30,15 @@ exit /b !ERRORLEVEL!
 :DRefresh
 :: RefreshEnv.cmd
 set download_01=download	%cacheFolder%\RefreshEnv.cmd	https://raw.githubusercontent.com/chocolatey/chocolatey/master/src/redirects/RefreshEnv.cmd
+exit /b !ERRORLEVEL!
+
+:DNew
+set download_00=download	%cacheFolder%\nasm-2.13.01-installer-x64.exe	http://www.nasm.us/pub/nasm/releasebuilds/2.13.01/win64/nasm-2.13.01-installer-x64.exe
+set download_01=download	%cacheFolder%\qt-opensource-windows-x86-msvc2015_64-5.8.0.exe	http://download.qt.io/official_releases/qt/5.8/5.8.0/qt-opensource-windows-x86-msvc2015_64-5.8.0.exe
+set download_02=download	%cacheFolder%\qt-creator-opensource-windows-x86-4.2.2.exe	http://download.qt.io/official_releases/qtcreator/4.2/4.2.2/qt-creator-opensource-windows-x86-4.2.2.exe
+set download_03=download	%cacheFolder%\qt-opensource-windows-x86-msvc2015-5.8.0.exe	http://download.qt.io/official_releases/qt/5.8/5.8.0/qt-opensource-windows-x86-msvc2015-5.8.0.exe
+set download_04=download	%cacheFolder%\qt-opensource-windows-x86-mingw530-5.8.0.exe	http://download.qt.io/official_releases/qt/5.8/5.8.0/qt-opensource-windows-x86-mingw530-5.8.0.exe
+
 exit /b !ERRORLEVEL!
 
 :InstallChocolatey

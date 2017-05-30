@@ -130,3 +130,6 @@ https://docs.microsoft.com/en-us/sql/database-engine/install-windows/install-sql
 
 Visual Studio 2015
 https://msdn.microsoft.com/en-us/library/mt270173.aspx
+
+
+http://www.nasm.us/pub/nasm/releasebuilds/2.13.01/win64/nasm-2.13.01-installer-x64.exe
