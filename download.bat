@@ -1,4 +1,12 @@
 @echo off
+
+call :Start
+
+if exist cache\RefreshEnv.cmd call cache\RefreshEnv.cmd
+
+exit /b %ERRORLEVEL%
+
+:Start
 setlocal EnableDelayedExpansion
 
 @powershell -NoProfile -Command "Set-ExecutionPolicy Unrestricted -Scope CurrentUser -Force"
@@ -10,21 +18,24 @@ mkdir %cacheFolder%
 )
 call :CallLoop DRefresh&if not !ERRORLEVEL!==0 exit /b !ERRORLEVEL!
 call :CallLoop InstallNpm&if not !ERRORLEVEL!==0 exit /b !ERRORLEVEL!
-call :CallLoop InstallDotNet&if not !ERRORLEVEL!==0 exit /b !ERRORLEVEL!
+rem call :CallLoop InstallDotNet&if not !ERRORLEVEL!==0 exit /b !ERRORLEVEL!
 call :CallLoop InstallGulp&if not !ERRORLEVEL!==0 exit /b !ERRORLEVEL!
 call :CallLoop InstallBower&if not !ERRORLEVEL!==0 exit /b !ERRORLEVEL!
 call :CallLoop InstallChocolatey&if not !ERRORLEVEL!==0 exit /b !ERRORLEVEL!
-call :CallLoop DNew&if not !ERRORLEVEL!==0 exit /b !ERRORLEVEL!
+rem call :CallLoop DNew&if not !ERRORLEVEL!==0 exit /b !ERRORLEVEL!
 
 exit /b !ERRORLEVEL!
 
 :CallLoop
 setlocal EnableDelayedExpansion
+echo starting %1
 call:%1
 if not !ERRORLEVEL!==0 exit /b !ERRORLEVEL!
 call :DownloadLoop
 endlocal
 call %cacheFolder%\RefreshEnv
+
+echo done %1
 exit /b !ERRORLEVEL!
 
 :DRefresh
@@ -43,7 +54,7 @@ exit /b !ERRORLEVEL!
 
 :InstallChocolatey
 :: Chocolatey install file
-set download_11=test	choco /?	n	3
+set download_00=test	choco /?	n	3
 set download_01=download	%cacheFolder%\installChocolatey.ps1	https://chocolatey.org/install.ps1
 set download_12=psf	%cacheFolder%\installChocolatey.ps1
 set download_13=refreshvars
@@ -56,13 +67,13 @@ set download_15=msi	%cacheFolder%\node-v6.10.3-x64.msi
 exit /b !ERRORLEVEL!
 
 :InstallGulp
-set download_14=test	call gulp	n	1
-set download_15=ex	call npm install gulp bower -g
+set download_14=test	call gulp	y	1
+set download_15=ex	call npm install gulp bower -g --fetch-retries=0 --fetch-retry-mintimeout=2000 --fetch-retry-maxtimeout=5000
 exit /b !ERRORLEVEL!
 
 :InstallBower
-set download_14=test	call bower	n	1
-set download_15=ex	call npm install gulp bower -g
+set download_14=test	call bower	y	1
+set download_15=ex	call npm install gulp bower -g --fetch-retries=0 --fetch-retry-mintimeout=2000 --fetch-retry-maxtimeout=5000
 exit /b !ERRORLEVEL!
 
 :InstallTest
@@ -116,23 +127,38 @@ exit /b !ERRORLEVEL!
 :DownloadLoop
 
 set skipnext=0
-for /f "tokens=2,3,4,5,6,7 usebackq delims==	" %%i in (`set download_`) do (
+for /f "tokens=1,2,3,4,5,6,7 usebackq delims=	" %%i in (`set download_`) do (
 rem echo !ERRORLEVEL!
 rem start of the loop
+
+for /f "tokens=2 delims==" %%i in ("%%i") do set testtype=%%i
+
+if t==t (
+echo testtype=!testtype!
+set download_
+echo i %%i
+echo j %%j
+echo k %%k
+echo l %%l
+echo m %%m
+echo n %%n
+echo o %%o
+rem pause
+)
 
 if !skipnext! gtr 0 (
 rem echo !skipnext!
 set /a skipnext+=-1 >nul
-echo skipping %%i %%j %%k %%l %%m %%n
+echo skipping !testtype! %%j %%k %%l %%m %%n
 rem set skip next to false
 ) else (
-rem echo not skipping %%i %%j %%k %%l %%m %%n
-if %%i==download (
+rem echo not skipping !testtype! %%j %%k %%l %%m %%n
+if !testtype!==download (
 if not exist %%j echo downloading %%k&@powershell -NoProfile -ExecutionPolicy Bypass -Command "(New-Object System.Net.WebClient).DownloadFile('%%k', '%%j')" & if not !ERRORLEVEL!==0 echo error downloading %%k &EXIT /B !ERRORLEVEL!
 )
 rem end of download
 
-if %%i==Reg (
+if !testtype!==Reg (
 for /f "tokens=3* delims= " %%! in ('Reg.exe QUERY "%%j" /v "%%k" ^|Findstr.exe /ri "%%k"') do (
 set /a v=%%!
 if !v! geq %%l (
@@ -153,7 +179,7 @@ if not !ERRORLEVEL!==0 echo failed while trying to install !download!&exit /b !E
 )
 rem end of reg
 
-if %%i==RegE (
+if !testtype!==RegE (
 Reg.exe QUERY "%%j" 2>nul 1>nul
 if !ERRORLEVEL!==1 (
 :: now it needs to be potentially downloaded and installed
@@ -171,8 +197,8 @@ echo %%k already installed
 )
 rem end of reg
 
-if %%i==msu (
-rem echo %%i
+if !testtype!==msu (
+rem echo !testtype!
 rem echo %%j
 rem echo %%k
 wmic qfe get hotfixid | findstr "%%j" >nul 2>&1
@@ -201,33 +227,37 @@ if exist !expanded! rmdir /q /s !expanded!
 )
 rem end of msu
 
-if %%i==test (
+if !testtype!==test (
 set skipnext=%%l
 if [%%l]==[] set skipnext=1
+echo skipnextis=!skipnext!
 rem echo !ERRORLEVEL! errorlevel before and !skipnext!
 rem echo %%j
 %%j 2>nul 1>nul
 rem echo !ERRORLEVEL! errorlevel before and !skipnext! %%k
 if !ERRORLEVEL!==0 (
 if [%%k]==[y] set skipnext=0
+echo skipnextist=!skipnext!
 ) else (
 if not [%%k]==[y] set skipnext=0
+echo skipnextis=s!skipnext!
 )
+echo skipnextis=!skipnext!
 rem echo !ERRORLEVEL! errorlevel after and !skipnext!
 )
 rem end of test
 
-if %%i==psf (
+if !testtype!==psf (
 @powershell -NoProfile -ExecutionPolicy Bypass -File %%j
 )
 rem end of power script file
 
-if %%i==refreshvars (
+if !testtype!==refreshvars (
 call %cacheFolder%\RefreshEnv.cmd
 )
 rem end of psf
 
-if %%i==msi (
+if !testtype!==msi (
 rem echo errorlevel !ERRORLEVEL!
 start /wait %%j /quiet
 rem echo errorlevel !ERRORLEVEL!
@@ -238,7 +268,8 @@ exit /b !ERRORLEVEL!
 )
 rem end of msi
 
-if %%i==ex (
+if !testtype!==ex (
+echo %%j
 %%j
 exit /b !ERRORLEVEL!
 )
