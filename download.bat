@@ -154,7 +154,7 @@ rem set skip next to false
 ) else (
 rem echo not skipping !testtype! %%j %%k %%l %%m %%n
 if !testtype!==download (
-if not exist %%j echo downloading %%k&@powershell -NoProfile -ExecutionPolicy Bypass -Command "(New-Object System.Net.WebClient).DownloadFile('%%k', '%%j')" & if not !ERRORLEVEL!==0 echo error downloading %%k &EXIT /B !ERRORLEVEL!
+if not exist %%j echo downloading %%k to %%j&@powershell -NoProfile -ExecutionPolicy Bypass -Command "(New-Object System.Net.WebClient).DownloadFile('%%k', '%%j')" & if not !ERRORLEVEL!==0 echo error downloading %%k &EXIT /B !ERRORLEVEL!
 )
 rem end of download
 
