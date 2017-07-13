@@ -6,7 +6,7 @@ HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\NetworkList\Defa
 mkdir %APPDATA%\npm-cache
 
 reg import "E:\_data_\Setup\disable.windows.s.reg"
-reg import "E:\_data_\Setup\create.vpn.startmenu.links"
+E:\_data_\Setup\create.vpn.startmenu.links
 reg import "E:\_data_\Setup\IncludeNoLockScreen.reg"
 reg import "E:\_data_\Setup\ProcessWaitTimeouts.reg"
 reg import "E:\_data_\Setup\allow.administrator.to.see.mapped.drives.reg"
