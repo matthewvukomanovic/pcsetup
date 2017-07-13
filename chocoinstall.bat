@@ -2,6 +2,10 @@ choco install vim -y
 call RefreshEnv.cmd
 choco install everything -y
 call RefreshEnv.cmd
+choco install conemu -y
+call RefreshEnv.cmd
+choco install nugetpackageexplorer -y
+call RefreshEnv.cmd
 choco install 7zip -y
 call RefreshEnv.cmd
 choco install autohotkey -y
