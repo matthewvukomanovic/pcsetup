@@ -1,3 +1,7 @@
+choco install vim -y
+call RefreshEnv.cmd
+choco install everything -y
+call RefreshEnv.cmd
 choco install 7zip -y
 call RefreshEnv.cmd
 choco install autohotkey -y
@@ -16,7 +20,7 @@ choco install imdisk -y
 call RefreshEnv.cmd
 choco install dependencywalker  -y
 call RefreshEnv.cmd
-choco install stylecop -y
+rem choco install stylecop -y
 call RefreshEnv.cmd
 choco install iis-application-initialization -y
 call RefreshEnv.cmd
@@ -98,6 +102,7 @@ call RefreshEnv.cmd
 choco install gnuwin -y
 call RefreshEnv.cmd
 choco install sysinternals -y
+call RefreshEnv.cmd
 
 rem choco install smartgit
 rem https://chocolatey.org/packages/papercut
