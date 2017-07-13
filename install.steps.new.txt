@@ -1,0 +1,38 @@
+mkdir %APPDATA%\npm-cache
+
+reg import "E:\_data_\Setup\disable.windows.s.reg"
+reg import "E:\_data_\Setup\create.vpn.startmenu.links"
+reg import "E:\_data_\Setup\IncludeNoLockScreen.reg"
+reg import "E:\_data_\Setup\ProcessWaitTimeouts.reg"
+reg import "E:\_data_\Setup\allow.administrator.to.see.mapped.drives.reg"
+reg import "E:\_data_\Setup\Hide.And.Disable.OneDrive.Icon.reg"
+reg import "E:\_data_\Setup\ExplorerSettings.reg"
+
+dism /online /Enable-Feature /FeatureName:IIS-WebServerRole /FeatureName:IIS-WebServer /FeatureName:IIS-CommonHttpFeatures /FeatureName:IIS-HttpErrors /FeatureName:IIS-HttpRedirect /FeatureName:IIS-ApplicationDevelopment /FeatureName:IIS-NetFxExtensibility45 /FeatureName:IIS-Security /FeatureName:IIS-URLAuthorization /FeatureName:IIS-RequestFiltering /FeatureName:IIS-IPSecurity /FeatureName:IIS-Performance /FeatureName:IIS-WebServerManagementTools /FeatureName:IIS-ManagementScriptingTools /FeatureName:IIS-HostableWebCore /FeatureName:IIS-WindowsAuthentication /FeatureName:IIS-DigestAuthentication /FeatureName:IIS-ClientCertificateMappingAuthentication /FeatureName:IIS-StaticContent /FeatureName:IIS-DefaultDocument /FeatureName:IIS-DirectoryBrowsing /FeatureName:IIS-WebSockets /FeatureName:IIS-ApplicationInit /FeatureName:IIS-ASPNET45 /FeatureName:IIS-ISAPIExtensions /FeatureName:IIS-ISAPIFilter /FeatureName:IIS-ServerSideIncludes /FeatureName:IIS-BasicAuthentication /FeatureName:IIS-HttpCompressionStatic /FeatureName:IIS-ManagementConsole /FeatureName:IIS-ManagementService /FeatureName:NetFx4Extended-ASPNET45 /FeatureName:TelnetClient
+
+taskkill /f /im OneDrive.exe
+%SystemRoot%\SysWOW64\OneDriveSetup.exe /uninstall
+
+@powershell -NoProfile -ExecutionPolicy Bypass "Set-ExecutionPolicy Unrestricted -Scope LocalMachine"
+@powershell -NoProfile  -Command F:\install.ps1
+
+Powershell:
+
+Set-ExecutionPolicy Unrestricted -Scope LocalMachine
+Get-AppxPackage *Photos* | Remove-AppxPackage
+Get-AppxPackage *Skype* | Remove-AppxPackage
+Get-AppxPackage *Music* | Remove-AppxPackage
+Get-AppxPackage *Messaging* | Remove-AppxPackage
+Get-AppxPackage *zunevideo* | Remove-AppxPackage
+Get-AppxPackage *bingsports* | Remove-AppxPackage
+Get-AppxPackage *xboxapp* | Remove-AppxPackage
+Get-AppxPackage *Microsoft.MicrosoftOfficeHub* | Remove-AppxPackage
+
+
+
+
+
+
+
+
+choco config set cacheLocation F:\chococache
