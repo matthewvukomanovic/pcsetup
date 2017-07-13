@@ -47,6 +47,8 @@ choco install firefox -y
 call RefreshEnv.cmd
 choco install adblockplus-firefox -y
 call RefreshEnv.cmd
+choco install googlechrome -y
+call RefreshEnv.cmd
 
 choco install notepadplusplus.install -y
 call RefreshEnv.cmd
@@ -126,6 +128,9 @@ call RefreshEnv.cmd
 
 choco install urlrewrite -y
 call RefreshEnv.cmd
+
+rem choco install markdown-edit -y
+rem call RefreshEnv.cmd
 
 rem choco install linkshellextension -y
 rem call RefreshEnv.cmd
