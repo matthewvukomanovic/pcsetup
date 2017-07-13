@@ -12,6 +12,8 @@ reg import "E:\_data_\Setup\ProcessWaitTimeouts.reg"
 reg import "E:\_data_\Setup\allow.administrator.to.see.mapped.drives.reg"
 reg import "E:\_data_\Setup\Hide.And.Disable.OneDrive.Icon.reg"
 reg import "E:\_data_\Setup\ExplorerSettings.reg"
+reg import "E:\_data_\Setup\Windows Update Settings.reg"
+reg import "E:\_data_\Setup\Windows Network Settings.reg"
 
 dism /online /Enable-Feature /FeatureName:IIS-WebServerRole /FeatureName:IIS-WebServer /FeatureName:IIS-CommonHttpFeatures /FeatureName:IIS-HttpErrors /FeatureName:IIS-HttpRedirect /FeatureName:IIS-ApplicationDevelopment /FeatureName:IIS-NetFxExtensibility45 /FeatureName:IIS-Security /FeatureName:IIS-URLAuthorization /FeatureName:IIS-RequestFiltering /FeatureName:IIS-IPSecurity /FeatureName:IIS-Performance /FeatureName:IIS-WebServerManagementTools /FeatureName:IIS-ManagementScriptingTools /FeatureName:IIS-HostableWebCore /FeatureName:IIS-WindowsAuthentication /FeatureName:IIS-DigestAuthentication /FeatureName:IIS-ClientCertificateMappingAuthentication /FeatureName:IIS-StaticContent /FeatureName:IIS-DefaultDocument /FeatureName:IIS-DirectoryBrowsing /FeatureName:IIS-WebSockets /FeatureName:IIS-ApplicationInit /FeatureName:IIS-ASPNET45 /FeatureName:IIS-ISAPIExtensions /FeatureName:IIS-ISAPIFilter /FeatureName:IIS-ServerSideIncludes /FeatureName:IIS-BasicAuthentication /FeatureName:IIS-HttpCompressionStatic /FeatureName:IIS-ManagementConsole /FeatureName:IIS-ManagementService /FeatureName:NetFx4Extended-ASPNET45 /FeatureName:TelnetClient
 
