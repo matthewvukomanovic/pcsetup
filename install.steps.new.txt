@@ -41,6 +41,7 @@ Get-AppxPackage *Microsoft.MicrosoftOfficeHub* | Remove-AppxPackage
 
 ::https://docs.microsoft.com/en-us/windows/uwp/get-started/enable-your-device-for-development?ocid=WinClient_Ver1703_Settings_DevMode
 
+:: Find a way to use the already downloaded windows updates from C:\Windows\SoftwareDistribution
 
 
 choco config set cacheLocation F:\chococache
