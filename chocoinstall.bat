@@ -34,7 +34,8 @@ choco install sudo -y
 call RefreshEnv.cmd
 choco install rsat -y
 call RefreshEnv.cmd
-
+choco install vlc -y
+call RefreshEnv.cmd
 
 choco install freesshd -y
 call RefreshEnv.cmd

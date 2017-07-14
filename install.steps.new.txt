@@ -35,10 +35,11 @@ Get-AppxPackage *bingsports* | Remove-AppxPackage
 Get-AppxPackage *xboxapp* | Remove-AppxPackage
 Get-AppxPackage *Microsoft.MicrosoftOfficeHub* | Remove-AppxPackage
 
+::set windows to developer mode
+:: set date and time and region and language
+:: Settings -> Systems -> Multitasking -> Virtual Desktops -> All Desktops
 
-
-
-
+::https://docs.microsoft.com/en-us/windows/uwp/get-started/enable-your-device-for-development?ocid=WinClient_Ver1703_Settings_DevMode
 
 
 
